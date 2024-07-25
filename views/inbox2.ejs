@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+    <style>
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header img {
+            height: 50px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #1976D2;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .action-links a {
+            color: #1976D2;
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+        .view-button {
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        .disabled-button {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+    <style>
+        .chatbox-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            max-height: 400px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+        }
+        .chatbox-header {
+            background-color: #1877f2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        .chatbox-messages {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: scroll;
+            flex-grow: 1;
+        }
+        .chatbox-form {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chatbox-form textarea {
+            width: calc(100% - 20px);
+            height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        .chatbox-form button {
+            background-color: #1877f2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chatbox-form button:hover {
+            background-color: #155ab6;
+        }
+        .chat-button {
+            color: #1877f2;
+            cursor: pointer;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+            justify-content: center;
+    display: flex;
+        }
+        .nav-buttons button {
+            background-color: #6c757d;
+        }
+        .nav-buttons button:hover {
+            background-color: #5a6268;
+        }
+        .nav-buttons .back-button {
+            background-color: #6c757d;
+        }
+        .nav-buttons .logout-button {
+            background-color: #dc3545;
+        }
+        .nav-buttons .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function openChatbox(query_number, applicant) {
+            $.ajax({
+                url: 'chat_with_applicant',
+                method: 'GET',
+                data: {
+                    query_number: query_number,
+                    applicant: applicant
+                },
+                success: function(response) {
+                    $('.chatbox-messages').html(response);
+                    $('#chatbox_query_number').val(query_number);
+                    $('#chatbox_applicant').val(applicant);
+                    $('#chatbox').show();
+                }
+            });
+        }
+        function closeChatbox() {
+            $('#chatbox').hide();
+        }
+        function sendMessage() {
+            var query_number = $('#chatbox_query_number').val();
+            var applicant = $('#chatbox_applicant').val();
+            var message = $('textarea[name="message"]').val();
+            if (message.trim() === '') {
+                return;
+            }
+            $.ajax({
+                url: 'chat_with_applicant',
+                method: 'POST',
+                data: {
+                    query_number: query_number,
+                    applicant: applicant,
+                    message: message
+                },
+                success: function(response) {
+                    $('.chatbox-messages').html(response);
+                    $('textarea[name="message"]').val('');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>EchoResolve</h1>
+    </div>
+    <br>
+    <div class="nav-buttons">
+        <button class="back-button" onclick="history.back()">Back</button>
+        <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+    </div>
+    <div class="container">
+        <h1>Inbox</h1>
+        <h2>Pending Applications</h2>
+        <% if (applications.length > 0) { %>
+            <table>
+                <tr>
+                    <th>Query ID</th>
+                    <th>Applicant Username</th>
+                    <th>Department</th>
+                    <th>Query Type</th>
+                    <th>Query Sub Type</th>
+                    <th>Action</th>
+                </tr>
+                <% applications.forEach(application => { %>
+                    <% if ((application.dynamic_role === 'support1' && application.support1_status === 0) ||
+                           (application.dynamic_role === 'support2' && application.support1_status === -1 && application.support2_status === 0) ||
+                           (application.dynamic_role === 'support3' && application.support2_status === -1 && application.support3_status === 0)) { %>
+                        <tr>
+                            <td><%= application.query_number %></td>
+                            <td><%= application.username %></td>
+                            <td><%= application.department %></td>
+                            <td><%= application.query_type %></td>
+                            <td><%= application.sub_query_type %></td>
+                            <td class="action-links">
+                                <a href="/resolve?id=<%= application.query_number %>&dynamic_role=<%= application.dynamic_role %>">Resolve</a> | 
+                                <% if (application.dynamic_role === 'support1' || application.dynamic_role === 'support2') { %>
+                                    <a href="/forward?id=<%= application.query_number %>&dynamic_role=<%= application.dynamic_role %>">Forward</a> | 
+                                <% } %>
+                                <a href="/view_application?query_number=<%= application.query_number %>" class="view-button">View Full Query</a> | 
+                                <span class="chat-button" onclick="openChatbox('<%= application.query_number %>', '<%= application.username %>')"><strong>Chat With Applicant</strong></span>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% }); %>
+            </table>
+        <% } else { %>
+            <p>No pending applications found</p>
+        <% } %>
+        <h2>Past Applications</h2>
+        <% if (applications.length > 0) { %>
+            <table>
+                <tr>
+                    <th>Query ID</th>
+                    <th>Applicant Username</th>
+                    <th>Department</th>
+                    <th>Query Type</th>
+                    <th>Query Subtype</th>
+                    <th>Action</th>
+                </tr>
+                <% applications.forEach(application => { %>
+                    <% if ((application.dynamic_role === 'support1' && application.support1_status !== 0) ||
+                           (application.dynamic_role === 'support2' && application.support2_status !== 0) ||
+                           (application.dynamic_role === 'support3' && application.support3_status !== 0)) { %>
+                        <tr>
+                            <td><%= application.query_number %></td>
+                            <td><%= application.username %></td>
+                            <td><%= application.department %></td>
+                            <td><%= application.query_type %></td>
+                            <td><%= application.sub_query_type %></td>
+                            <td class="action-links">
+                                <a href="/view_application?query_number=<%= application.query_number %>" class="view-button">View Full Query</a> | 
+                                <a href="/user_print_feedback?query_number=<%= application.query_number %>" class="view-button">View Feedback</a>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% }); %>
+            </table>
+        <% } else { %>
+            <p>No past applications found</p>
+        <% } %>
+    </div>
+    
+    <div id="chatbox" class="chatbox-container" style="display:none;">
+        <div class="chatbox-header">
+            <span>Chat with Applicant</span>
+            <span class="close-btn" onclick="closeChatbox()">X</span>
+        </div>
+        <div class="chatbox-messages">
+            <!-- Messages will be loaded here via AJAX -->
+        </div>
+        <div class="chatbox-form">
+            <form id="chatForm" method="POST">
+                <textarea name="message" placeholder="Type your message here..."></textarea>
+                <button type="button" onclick="sendMessage()">Send</button>
+                <input type="hidden" name="query_number" id="chatbox_query_number">
+                <input type="hidden" name="applicant" id="chatbox_applicant">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

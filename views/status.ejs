@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Status</title>
+    <style>
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header img {
+            height: 50px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .progress-container {
+    position: relative;
+    width: 100%;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #ddd;
+    position: relative;
+    margin-top: 20px;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: absolute;
+    top: -4px;
+}
+
+.progress-dot.grey {
+    background-color: grey;
+}
+
+.progress-dot.green {
+    background-color: green;
+}
+
+.progress-dot.yellow {
+    background-color: yellow;
+}
+
+.progress-label {
+    position: absolute;
+    top: 20px;
+    transform: translateX(-50%);
+}
+
+/* Position classes */
+.position-0 {
+    left: 0%;
+}
+
+.position-25 {
+    left: 25%;
+}
+
+.position-50 {
+    left: 50%;
+}
+
+.position-75 {
+    left: 75%;
+}
+
+.position-100 {
+    left: 100%;
+}
+
+        .application-details {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .application-details h3 {
+            color: #1976D2;
+        }
+        .status-message {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1976D2;
+        }
+        .print-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            background-color: #1976D2;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .print-link:hover {
+            background-color: #135a9e;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-group button {
+            background-color: #1976D2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-group button:hover {
+            background-color: #135a9e;
+        }
+        .remarks {
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+        }
+        .chatbox-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px; /* Adjust width as needed */
+            max-height: 400px; /* Adjust max height as needed */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+        }
+
+        .chatbox-header {
+            background-color: #1877f2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chatbox-messages {
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: scroll;
+            flex-grow: 1;
+        }
+
+        .chatbox-form {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbox-form textarea {
+            width: calc(100% - 20px);
+            height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        .chatbox-form button {
+            background-color: #1877f2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chatbox-form button:hover {
+            background-color: #155ab6;
+        }
+
+        .chat-button {
+            color: #1877f2;
+            cursor: pointer;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+            justify-content: center;
+            display: flex;
+        }
+        .nav-buttons button {
+            background-color: #6c757d;
+        }
+        .nav-buttons button:hover {
+            background-color: #5a6268;
+        }
+        .nav-buttons .back-button {
+            background-color: #6c757d;
+        }
+        .nav-buttons .logout-button {
+            background-color: #dc3545;
+        }
+        .nav-buttons .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function openChatbox(query_number, applicant) {
+            $.ajax({
+                url: '/chat_with_support',
+                method: 'GET',
+                data: {
+                    query_number: query_number,
+                    applicant: applicant
+                },
+                success: function(response) {
+                    $('.chatbox-messages').html(response);
+                    $('#chatbox_query_number').val(query_number);
+                    $('#chatbox_applicant').val(applicant);
+                    $('#chatbox').show();
+                }
+            });
+        }
+
+        function closeChatbox() {
+            $('#chatbox').hide();
+        }
+
+        function sendMessage() {
+            var query_number = $('#chatbox_query_number').val();
+            var applicant = $('#chatbox_applicant').val();
+            var message = $('textarea[name="message"]').val();
+            if (message.trim() === '') {
+                return;
+            }
+
+            $.ajax({
+                url: '/chat_with_support',
+                method: 'POST',
+                data: {
+                    query_number: query_number,
+                    applicant: applicant,
+                    message: message
+                },
+                success: function(response) {
+                    $('.chatbox-messages').html(response);
+                    $('textarea[name="message"]').val('');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="header">
+    <h1>EchoResolve</h1>
+</div>
+<br>
+<% function getStatusMessage(support1_status, support2_status, support3_status) { %>
+    <% if (support1_status == 1 || support2_status == 1 || support3_status == 1) { %>
+        Resolved
+    <% } else if (support1_status == -1 || support2_status == -1) { %>
+        Forwarded to next level
+    <% } else { %>
+        Pending
+    <% } %>
+<% } %>
+<div class="nav-buttons">
+    <button class="back-button" onclick="history.back()">Back</button>
+    <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+</div>
+<div class="container">
+    <h1>Track Your Applications</h1>
+
+    <% if (applications.length > 0) { %>
+        <% applications.forEach(application => { %>
+            <div class='application-details'>
+                <h3>Application <%= application.query_number %></h3>
+                <div class='progress-container'>
+                    <div class='progress-bar'></div>
+
+                    <% 
+                    const progress_steps = {
+                        'Query Submitted': 0,
+                        'Support Level 1 Status': 25,
+                        'Support Level 2 Status': 50,
+                        'Support Level 3 Status': 75,
+                        'Completed': 100
+                    };
+                    const support1_status = application.support1_status;
+                    const support2_status = application.support2_status;
+                    const support3_status = application.support3_status;
+
+                    for (const [step, percent] of Object.entries(progress_steps)) {
+                        let dot_class = 'progress-dot grey';
+                        if (step === 'Query Submitted' || (step === 'Completed' && (support3_status == 1 || support1_status == 1 || support2_status == 1))) {
+                            dot_class = 'progress-dot green';
+                        } else if (step === 'Support Level 1 Status' && support1_status == 1) {
+                            dot_class = 'progress-dot green';
+                        } else if (step === 'Support Level 1 Status' && support1_status == -1) {
+                            dot_class = 'progress-dot yellow';
+                        } else if (step === 'Support Level 2 Status' && support2_status == 1) {
+                            dot_class = 'progress-dot green';
+                        } else if (step === 'Support Level 2 Status' && support2_status == -1) {
+                            dot_class = 'progress-dot yellow';
+                        } else if (step === 'Support Level 3 Status' && support3_status == 1) {
+                            dot_class = 'progress-dot green';
+                        } else if (step === 'Support Level 3 Status' && support3_status == -1) {
+                            dot_class = 'progress-dot yellow';
+                        }
+                        const position_class = `position-${percent}`;
+                    %>
+                    <div class="<%= dot_class %> <%= position_class %>"></div>
+                    <div class="progress-label <%= position_class %>"><%= step %></div>
+                    <% } %>
+                </div>
+                <br>
+                <br>
+                <p class='status-message'>Status: <%= getStatusMessage(support1_status, support2_status, support3_status) %></p>
+                <% if (support3_status == 1 || support1_status == 1 || support2_status == 1) { %>
+                    <a href='view_application?query_number=<%= application.query_number %>' class='print-link'>View Full Query</a>
+                    <a href='feedback?id=<%= application.query_number %>' class='print-link'>Submit/View feedback</a>
+                <% } else { %>
+                    <a href='view_application?query_number=<%= application.query_number %>' class='print-link'>View Full Query</a>
+                    <button class='print-link' onclick="openChatbox('<%= application.query_number %>', '<%= username %>')">Chat with Support</button>
+                <% } %>
+                <hr>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>No applications found for user: <%= username %></p>
+    <% } %>
+</div>
+
+<div id="chatbox" class="chatbox-container" style="display:none;">
+    <div class="chatbox-header">
+        <span>Chat with Support</span>
+        <span class="close-btn" onclick="closeChatbox()">X</span>
+    </div>
+    <div class="chatbox-messages">
+        <!-- Messages will be loaded here via AJAX -->
+    </div>
+    <div class="chatbox-form">
+        <form id="chatForm" method="POST">
+            <textarea name="message" placeholder="Type your message here..."></textarea>
+            <button type="button" onclick="sendMessage()">Send</button>
+            <input type="hidden" name="query_number" id="chatbox_query_number">
+            <input type="hidden" name="applicant" id="chatbox_applicant">
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    function getStatusMessage(support1_status, support2_status, support3_status) {
+        if (support1_status == 1 || support2_status == 1 || support3_status == 1) {
+            return 'Resolved';
+        } else if (support1_status == -1 || support2_status == -1) {
+            return 'Forwarded to next level';
+        } else {
+            return 'Pending';
+        }
+    }
+</script>

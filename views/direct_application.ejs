@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            /* background: linear-gradient(135deg, #1e3c72, #2a5298, #3f879f, #56ab77); */
+            background-color: #f4f4f9;
+            color: #fff;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            position: fixed;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            /* color: #00aced; */
+            color: white;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 15px 20px;
+            width: 100%;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #34495e;
+            font-size: 28px;
+        }
+
+        .query-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .query-btn {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            width: 180px;
+        }
+
+        .query-btn:hover {
+            background-color: #3498db;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sub-options {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sub-options .sub-option-btn {
+            background-color: #ecf0f1;
+            color: #34495e;
+            border: 1px solid #bdc3c7;
+            padding: 12px 20px;
+            border-radius: 50px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 80%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sub-options .sub-option-btn:hover {
+            background-color: #bdc3c7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            width: 60%;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+            align-self: flex-start;
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        input,
+        textarea,
+        select,
+        button {
+            margin-top: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 10px rgba(41, 128, 185, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            padding: 15px 30px;
+        }
+
+        button:hover {
+            background-color: #2ecc71;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            background-color: #6c757d;
+        }
+        .nav-buttons button:hover {
+            background-color: #5a6268;
+        }
+        .nav-buttons .back-button {
+            background-color: #6c757d;
+        }
+        .nav-buttons .logout-button {
+            background-color: #dc3545;
+        }
+        .nav-buttons .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script>
+        function showSubOptions(type) {
+            document.getElementById('query_type').value = type;
+            const subOptionsContainer = document.getElementById('subOptions');
+            subOptionsContainer.style.display = 'flex';
+
+            let subOptionsHTML = '';
+
+            if (type === 'code') {
+                subOptionsHTML = `
+                    <button class="sub-option-btn" onclick="selectSubOption('Did not understand question')">Did not understand question</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Facing issue with code logic')">Facing issue with code logic</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Unable to make code from logic')">Unable to make code from logic</button>
+                `;
+            } else if (type === 'concept') {
+                subOptionsHTML = `
+                    <button class="sub-option-btn" onclick="selectSubOption('Concept not clear')">Concept not clear</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Need more examples')">Need more examples</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Facing issue with application')">Facing issue with application</button>
+                `;
+            } else if (type === 'platform') {
+                subOptionsHTML = `
+                    <button class="sub-option-btn" onclick="selectSubOption('Facing issue with platform usage')">Facing issue with platform usage</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Platform is not responding')">Platform is not responding</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Bug in platform')">Bug in platform</button>
+                `;
+            } else if (type === 'other') {
+                subOptionsHTML = `
+                    <button class="sub-option-btn" onclick="selectSubOption('Solution not clear')">Solution not clear</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Need a different approach')">Need a different approach</button>
+                    <button class="sub-option-btn" onclick="selectSubOption('Other')">Other</button>
+                `;
+            }
+
+            subOptionsContainer.innerHTML = subOptionsHTML;
+        }
+
+        function selectSubOption(subOption) {
+            document.getElementById('sub_query_type').value = subOption;
+            if (subOption === 'Other') {
+                const otherOption = prompt("Please specify your issue:");
+                document.getElementById('sub_query_type').value = otherOption;
+            }
+            openModal();
+        }
+
+        function openModal() {
+            document.getElementById('queryModal').style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('queryModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById('queryModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>EchoResolve</h2>
+        <!-- <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Queries</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul> -->
+        <footer>
+            <p>© 2024 EchoResolve</p>
+        </footer>
+    </div>
+    <div class="main-content">
+        <div class="nav-buttons">
+            <button class="back-button" onclick="history.back()">Back</button>
+            <!-- <button class="logout-button" onclick="location.href='/logout'">Logout</button> -->
+        </div>
+        <br>
+        <div class="header">
+            <h1>Submit Your Query</h1>
+        </div>
+        <div class="container">
+            <!-- <h2>Submit Your Query</h2> -->
+            <div class="query-options">
+                <button class="query-btn" onclick="showSubOptions('code')">Help with code</button>
+                <button class="query-btn" onclick="showSubOptions('concept')">Question/Concept Related</button>
+                <button class="query-btn" onclick="showSubOptions('platform')">Platform Related</button>
+                <button class="query-btn" onclick="showSubOptions('other')">Other</button>
+            </div>
+            <div id="subOptions" class="sub-options">
+                <!-- Sub options will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    <div id="queryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Submit Your Query</h2>
+            <form action="/direct_application" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="query_type" name="query_type">
+                <input type="hidden" id="sub_query_type" name="sub_query_type">
+                
+                <h2>User Details</h2>
+                <label for="name">Name:</label>
+                <input name="name" value="<%= emp_info.first_name %>">
+                <label for="email">Email ID:</label>
+                <input name="email" value="<%= emp_info.email_id %>">
+                <label for="phone">Phone:</label>
+                <input name="phone" value="<%= emp_info.mobile_no %>">
+                <label for="department">Department:</label>
+                <input name="department" value="<%= emp_info.department_id %>">
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="attachment">Attachment (if any):</label>
+                <input type="file" id="attachment" name="attachment">
+
+                <label for="additional_info">Additional Information:</label>
+                <textarea id="additional_info" name="additional_info"></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Status</title>
+    <style>
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-group button {
+            background-color: #1976D2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-group button:hover {
+            background-color: #135a9e;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            background-color: #6c757d;
+        }
+        .nav-buttons button:hover {
+            background-color: #5a6268;
+        }
+        .nav-buttons .back-button {
+            background-color: #6c757d;
+        }
+        .nav-buttons .logout-button {
+            background-color: #dc3545;
+        }
+        .nav-buttons .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>EchoResolve</h1>
+    </div>
+    <br>
+    <div class="container">
+        <h1>Track Your Applications</h1>
+        <% if (applications.length > 0) { %>
+            <table>
+                <tr>
+                    <th>Query ID</th>
+                    <th>Query Type</th>
+                    <th>Subquery Type</th>
+                    <th>Actions</th>
+                </tr>
+                <% applications.forEach(function(application) { %>
+                    <tr>
+                        <td><%= application.query_number %></td>
+                        <td><%= application.query_type %></td>
+                        <td><%= application.sub_query_type %></td>
+                        <td class="button-group">
+                            <button onclick="location.href='/status?id=<%= application.query_number %>'">View</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </table>
+        <% } else { %>
+            <p>No applications found.</p>
+        <% } %>
+        <div class="nav-buttons">
+            <button class="back-button" onclick="history.back()">Back</button>
+            <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+        </div>
+    </div>
+</body>
+</html>

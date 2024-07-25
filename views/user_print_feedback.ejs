@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .overview-box {
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: 10px;
+            width: 97%;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #00509e;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #00509e;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #00509e;
+            color: #ffffff;
+        }
+        td {
+            background-color: #f0f8ff;
+        }
+        tr:nth-child(even) td {
+            background-color: #d1e7ff;
+        }
+        tr:hover td {
+            background-color: #b3d4ff;
+        }
+        .print-button {
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #00509e;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .header-table td {
+            vertical-align: top;
+            padding: 10px;
+        }
+        .header-table .left {
+            width: 50%;
+        }
+        .header-table .right {
+            width: 50%;
+            border-left: 1px solid black;
+        }
+        .left-aligned {
+            text-align: left;
+        }
+        .organization-info {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            background-color: #6c757d;
+        }
+        .nav-buttons button:hover {
+            background-color: #5a6268;
+        }
+        .nav-buttons .back-button {
+            background-color: #6c757d;
+        }
+        .nav-buttons .logout-button {
+            background-color: #dc3545;
+        }
+        .nav-buttons .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="header-table">
+            <tr>
+                <td class="left">
+                    <p><strong>EchoResolve</strong></p>
+                    <p>Section Title: Feedback Report of Participants</p>
+                </td>
+                <td class="right">
+                    <p>Doc. No.: HRG/Feedback</p>
+                    <p>Report</p>
+                    <p>Issue No.:</p>
+                    <p>Issue Date: </p>
+                    <p>Rev. No.:</p>
+                    <p>Rev. Date:</p>
+                </td>
+            </tr>
+        </table>
+
+        <p class="organization-info">EchoResolve</p>
+
+        <h3>Feedback Report</h3>
+
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><%= feedback.submitted_by %></td>
+            </tr>
+        </table>
+
+        <h3>Details</h3>
+        <table>
+            <tr>
+                <td>Query Type</td>
+                <td><%= feedback.programme_type %></td>
+            </tr>
+        </table>
+
+        <h3>Brief overview (Up to 200 words)</h3>
+        <p class="overview-box"><%= feedback.overview %></p>
+        
+        <h3>Feedback</h3>
+        <table>
+            <tr>
+                <th>Quality Aspect</th>
+                <th>Level of Satisfaction (1=Lowest, 5=Highest)</th>
+            </tr>
+            <tr>
+                <td>Effectiveness</td>
+                <td>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                        <input type="radio" name="effectiveness" value="<%= i %>" <%= (feedback.effectiveness == i) ? 'checked' : '' %>><%= i %>
+                    <% } %>
+                </td>
+            </tr>
+            <tr>
+                <td>Conduct of Query</td>
+                <td>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                        <input type="radio" name="conduct" value="<%= i %>" <%= (feedback.conduct == i) ? 'checked' : '' %>><%= i %>
+                    <% } %>
+                </td>
+            </tr>
+            <tr>
+                <td>Support's Performance</td>
+                <td>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                        <input type="radio" name="instructor" value="<%= i %>" <%= (feedback.instructor == i) ? 'checked' : '' %>><%= i %>
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+
+        <h3>Signature</h3> 
+        <a href="javascript:window.print()" class="print-button">Print this page</a>
+        <div class="nav-buttons">
+            <button class="back-button" onclick="history.back()">Back</button>
+            <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+        </div>
+    </div>
+</body>
+</html>

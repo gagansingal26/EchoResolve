@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .chatbox {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message strong {
+            color: #007BFF;
+        }
+        .message .timestamp {
+            font-size: 0.8em;
+            color: #999;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat with Support</h1>
+        <div class="chatbox">
+            <% messages.forEach(message => { %>
+                <div class="message">
+                    <strong><%= message.sender %>:</strong> <%= message.message %>
+                    <span class="timestamp"><%= message.timestamp %></span>
+                </div>
+            <% }) %>
+        </div>
+</div>
+</body>
+</html>
